@@ -61,7 +61,6 @@ export default function App() {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  console.log(watched);
   /*
     useEffect(function () {
       console.log("Initial render");
@@ -83,10 +82,6 @@ export default function App() {
 
   function handleSelectMovie(id) {
     setSelectedId(selectedId === id ? null : id);
-  }
-
-  function handleSameMovie(id) {
-    return watched.filter((watched) => watched.id === id);
   }
 
   function handleCloseMovie() {
@@ -149,10 +144,10 @@ export default function App() {
         <Box>
           {selectedId ? (
             <MovieDetails
+              watched={watched}
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
               onAddWatched={handleAddWatched}
-              onHandleSameMovie={handleSameMovie}
             />
           ) : (
             <>
@@ -258,12 +253,7 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({
-  selectedId,
-  onCloseMovie,
-  onAddWatched,
-  onHandleSameMovie,
-}) {
+function MovieDetails({ watched, selectedId, onCloseMovie, onAddWatched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
@@ -281,7 +271,14 @@ function MovieDetails({
     Genre: genre,
   } = movie;
 
+  const sameMovie = watched.filter((movie) => movie.imdbID === selectedId);
+  console.log(sameMovie);
+
+  console.log(watched);
+
   function handleAdd() {
+    if (!sameMovie) return;
+
     const newWatchedMovie = {
       imdbID: selectedId,
       title,
@@ -319,10 +316,6 @@ function MovieDetails({
     },
     [selectedId]
   );
-
-  const sameMovie = onHandleSameMovie(movie.id);
-  console.log(sameMovie);
-
   return (
     <div className="details">
       {isLoading ? (
@@ -348,15 +341,19 @@ function MovieDetails({
             <div className="rating">
               <StarRating
                 maxRating={10}
-                defaultRating={sameMovie && sameMovie.userRating}
                 size={24}
+                defaultRating={
+                  sameMovie.length !== 0 ? sameMovie[0].userRating : 0
+                }
                 onSetRating={setUserRating}
               />
-              {sameMovie && userRating > 0 && (
-                <button className="btn-add" onClick={handleAdd}>
-                  + Add to list
-                </button>
-              )}
+              {sameMovie.length !== 0
+                ? ""
+                : userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      + Add to list
+                    </button>
+                  )}
             </div>
 
             <p>
