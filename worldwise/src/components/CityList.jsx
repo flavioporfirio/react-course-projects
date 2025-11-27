@@ -2,6 +2,7 @@ import styles from "./CityList.module.css";
 import Message from "./Message";
 import Spinner from "./Spinner";
 import CityItem from "./CityItem";
+
 export default function CityList({ cities, isLoading }) {
   if (isLoading) return <Spinner />;
 
