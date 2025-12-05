@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useReducer,
-} from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 
 const BASE_URL = 'http://localhost:9000';
 const CitiesContext = createContext();
