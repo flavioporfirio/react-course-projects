@@ -1,8 +1,10 @@
-import { useQuestions } from '../context/QuestionsContext';
-
-export default function Progress() {
-  const { index, numQuestions, points, maxPossiblePoints, answer } = useQuestions();
-
+export default function Progress({
+  index,
+  numQuestions,
+  points,
+  maxPossiblePoints,
+  answer,
+}) {
   return (
     <header className="progress">
       <progress max={numQuestions} value={index + Number(answer !== null)} />
